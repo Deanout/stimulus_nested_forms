@@ -1,0 +1,22 @@
+<div id="<%= dom_id project %>">
+  <p>
+    <strong>Name:</strong>
+    <%= project.name %>
+  </p>
+  <p>
+    <strong>Description:</strong>
+    <%= project.description %>
+  </p>
+  <p>
+    <strong>Tasks:</strong>
+    <ul>
+      <% project.tasks.each do |task| %>
+        <li>
+          <%= task.description %>
+          <%= task.completed ? "✅" : "❌" %>
+          <%= link_to "See More", task %>
+        </li>
+      <% end %>
+    </ul>
+  </p>
+</div>

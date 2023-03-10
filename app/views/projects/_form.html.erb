@@ -1,0 +1,39 @@
+<%= form_with(model: project, data: {
+  controller: "nested-form",
+  nested_form_wrapper_selector_value: '.nested-form-wrapper'
+}) do |form| %>
+  <% if project.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(project.errors.count, "error") %> prohibited this project from being saved:</h2>
+      <ul>
+        <% project.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+  </div>
+  <div>
+    <%= form.label :description, style: "display: block" %>
+    <%= form.text_area :description %>
+  </div>
+  <%# Start Custom Logic Here %>
+  <template data-nested-form-target="template">
+    <%= form.fields_for :tasks, Task.new, child_index: "NEW_RECORD" do |task_fields| %>
+      <%= render "projects/project_task_form", f: task_fields %>
+    <% end %>
+  </template>
+  <%= form.fields_for :tasks do |task_fields| %>
+    <%= render "projects/project_task_form", f: task_fields %>
+  <% end %>
+  <!-- Inserted elements will be injected before that target. -->
+  <div data-nested-form-target="target"></div>
+  <button type="button" data-action="nested-form#add">Add task</button>
+  <%# End Custom Logic %>
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
